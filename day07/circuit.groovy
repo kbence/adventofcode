@@ -13,7 +13,7 @@ def loadCircuit(filename) {
 
 cache = [:]
 
-def calculate(circuit, term, depth=0) {
+def calculate(circuit, term) {
     if (cache.containsKey(term))
         return cache[term]
 
@@ -25,17 +25,17 @@ def calculate(circuit, term, depth=0) {
 
     switch (true) {
         case wireDef.length == 1:
-            result = calculate(circuit, wireDef[0], depth+1)
+            result = calculate(circuit, wireDef[0])
             break
 
         case wireDef.length == 2 && wireDef[0] == 'NOT':
-            result = 65535 - calculate(circuit, wireDef[1], depth+1)
+            result = 65535 - calculate(circuit, wireDef[1])
             break
 
         case wireDef.length == 3 && ['OR', 'AND', 'LSHIFT', 'RSHIFT'].contains(wireDef[1]):
             // println wireDef
-            def val1 = calculate(circuit, wireDef[0], depth+1)
-            def val2 = calculate(circuit, wireDef[2], depth+1)
+            def val1 = calculate(circuit, wireDef[0])
+            def val2 = calculate(circuit, wireDef[2])
 
             switch (wireDef[1]) {
                 case 'OR':     result = val1 | val2;  break
